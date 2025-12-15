@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import UserRoleEnum from 'src/user/enum/userRoleEnum';
 import { UserService } from 'src/user/user.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -12,9 +12,10 @@ export class AuthService {
   ) {}
 
   async register(mobile: string, password: string, display_name: string) {
+    const hashPassword: string = await bcrypt.hash(password, 10);
     return this.userService.create({
       mobile,
-      password,
+      password: hashPassword,
       display_name,
       role: UserRoleEnum.NormalUser,
     });
