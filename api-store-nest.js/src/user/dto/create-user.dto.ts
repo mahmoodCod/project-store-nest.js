@@ -3,6 +3,8 @@ import {
   IsNotEmpty,
   IsString,
   Matches,
+  MaxLength,
+  MinLength,
   Validate,
 } from 'class-validator';
 
@@ -16,4 +18,18 @@ export class CreateUserDto {
     message: 'Mobile number must be a valid Iranian mobile number',
   })
   mobile: string;
+
+  @IsString({ message: 'Display_name must be a string' })
+  @IsNotEmpty({ message: 'Display_name is required' })
+  @MinLength(3)
+  @MaxLength(50)
+  display_name: string;
+
+  @IsString({ message: 'Password must be a string' })
+  @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, {
+    message: 'Password is required',
+  })
+  @MinLength(8)
+  @MaxLength(16)
+  password: string;
 }
