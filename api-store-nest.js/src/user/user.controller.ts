@@ -33,11 +33,11 @@ export class UserController {
   @Get()
   async findAll(
     @Res() res: Response,
-    @Query('status') status?: UserRoleEnum,
+    @Query('role') role?: UserRoleEnum,
     @Query('limit') limit: number = 10,
     @Query('page') page: number = 1,
   ) {
-    const users = await this.userService.findAll(status, limit, page);
+    const users = await this.userService.findAll(role, limit, page);
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: users,

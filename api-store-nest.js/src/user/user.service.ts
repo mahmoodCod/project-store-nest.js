@@ -22,11 +22,11 @@ export class UserService {
     }
   }
 
-  async findAll(status?: UserRoleEnum, limit: number = 10, page: number = 1) {
+  async findAll(role?: UserRoleEnum, limit: number = 10, page: number = 1) {
     const query = this.userRepository.createQueryBuilder('users');
 
-    if (status) {
-      query.where('status = :status', { status });
+    if (role) {
+      query.where('role = :role', { role });
     }
 
     query.skip((page - 1) * limit).take(limit);
