@@ -70,7 +70,12 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    const removeUser = await this.userService.remove(+id);
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: removeUser,
+      message: 'Users removed successfully :))',
+    });
   }
 }
