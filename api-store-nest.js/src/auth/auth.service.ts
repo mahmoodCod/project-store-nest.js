@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import UserRoleEnum from 'src/user/enum/userRoleEnum';
 import { UserService } from 'src/user/user.service';
@@ -22,6 +22,14 @@ export class AuthService {
   }
 
   async login(mobile: string, password: string) {
-    const user = await this.userService
+    const user = await this.userService.findOneByMobile(mobile);
+    if (!(await bcrypt.compare(password, user.password))) {
+      throw new UnauthorizedException('Your password is incorrect!!');
+    }
+    const payload = {
+      mobile: user.mobile,
+      sub: user.id,
+      display_name: user.display_name,
+    };
   }
 }
