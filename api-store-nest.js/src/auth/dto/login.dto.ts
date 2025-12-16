@@ -8,7 +8,7 @@ import {
   Validate,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-export class RegisterDto {
+export class LoginDto {
   @IsString({ message: 'Mobile must be a string' })
   @IsNotEmpty({ message: 'Mobile is required' })
   @Matches(/^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/, {
