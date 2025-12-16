@@ -20,4 +20,8 @@ export class AuthService {
       role: UserRoleEnum.NormalUser,
     });
   }
+
+  async login(mobile: string, password: string) {
+    const user = await this.userService
+  }
 }

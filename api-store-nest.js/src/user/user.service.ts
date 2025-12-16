@@ -48,6 +48,16 @@ export class UserService {
     return users;
   }
 
+  async findOneByMobile(mobile: string) {
+    const users = await this.userRepository.findOneBy({ mobile });
+
+    if (!users) {
+      throw new NotFoundException(`Users ${mobile} not found !!`);
+    }
+
+    return users;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const users = await this.userRepository.findOneBy({ id });
 
