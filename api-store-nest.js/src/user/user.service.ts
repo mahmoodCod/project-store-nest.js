@@ -16,11 +16,17 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto) {
     try {
-      const createUser = this.userRepository.create(createUserDto);
+      const alreadyUser = await this.findOneByMobile(
+        createUserDto.mobile,
+        true,
+      );
 
-      return await this.userRepository.save(createUser);
+      if (!alreadyUser) {
+        const createUser = this.userRepository.create(createUserDto);
+        return await this.userRepository.save(createUser);
+      }
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -48,12 +54,13 @@ export class UserService {
     return users;
   }
 
-  async findOneByMobile(mobile: string) {
+  async findOneByMobile(mobile: string, checkExist = false) {
     const users = await this.userRepository.findOneBy({ mobile });
 
-    if (!users) {
-      throw new NotFoundException(`Users ${mobile} not found !!`);
-    }
+    if (!checkExist)
+      if (!users) {
+        throw new NotFoundException(`Users ${mobile} not found !!`);
+      }
 
     return users;
   }
