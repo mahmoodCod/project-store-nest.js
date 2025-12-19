@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,13 +17,19 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto) {
     try {
-      const createUser = this.userRepository.create(createUserDto);
+      const alreadyUser = await this.findOneByMobile(
+        createUserDto.mobile,
+        true,
+      );
 
-      return await this.userRepository.save(createUser);
+      if (!alreadyUser) {
+        const createUser = this.userRepository.create(createUserDto);
+        return await this.userRepository.save(createUser);
+      } else throw new BadRequestException('User already exists!!');
     } catch (error) {
-      throw new BadRequestException('Error created user!!');
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -44,6 +51,17 @@ export class UserService {
     if (!users) {
       throw new NotFoundException(`Users ${id} not found !!`);
     }
+
+    return users;
+  }
+
+  async findOneByMobile(mobile: string, checkExist: boolean = false) {
+    const users = await this.userRepository.findOneBy({ mobile });
+
+    if (!checkExist)
+      if (!users) {
+        throw new NotFoundException(`Users ${mobile} not found !!`);
+      }
 
     return users;
   }
