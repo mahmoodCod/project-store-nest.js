@@ -1,6 +1,6 @@
 import {
-  BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,7 +22,7 @@ export class UserService {
 
       return await this.userRepository.save(createUser);
     } catch (error) {
-      throw new BadRequestException('Error created user!!');
+      throw new InternalServerErrorException(error);
     }
   }
 
