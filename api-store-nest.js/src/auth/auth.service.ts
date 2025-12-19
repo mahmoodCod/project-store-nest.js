@@ -23,14 +23,22 @@ export class AuthService {
 
   async login(mobile: string, password: string) {
     const user = await this.userService.findOneByMobile(mobile);
-    if (!(await bcrypt.compare(password, user.password))) {
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       throw new UnauthorizedException('Your password is incorrect!!');
     }
+
     const payload = {
       mobile: user.mobile,
       sub: user.id,
       display_name: user.display_name,
     };
+
     const token = this.jwtService.sign(payload);
 
     return {

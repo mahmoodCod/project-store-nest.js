@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -26,7 +27,7 @@ export class UserService {
       if (!alreadyUser) {
         const createUser = this.userRepository.create(createUserDto);
         return await this.userRepository.save(createUser);
-      }
+      } else throw new BadRequestException('User already exists!!');
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -54,7 +55,7 @@ export class UserService {
     return users;
   }
 
-  async findOneByMobile(mobile: string, checkExist = false) {
+  async findOneByMobile(mobile: string, checkExist: boolean = false) {
     const users = await this.userRepository.findOneBy({ mobile });
 
     if (!checkExist)
