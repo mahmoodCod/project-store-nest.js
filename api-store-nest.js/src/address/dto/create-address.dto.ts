@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateAddressDto {
   @IsString({ message: 'Privince must be a string' })
@@ -16,4 +16,12 @@ export class CreateAddressDto {
   @IsString()
   @Length(10, 10, { message: 'Postal_code must be 10 digits' })
   postal_code: string;
+
+  @IsString({ message: 'Reciver_mobile must be a string' })
+  @Length(11, 11, { message: 'Reciver_mobile must be a 11 digits' })
+  reciver_mobile: string;
+
+  @IsString({ message: 'Description must be a string' })
+  @IsOptional()
+  description?: string;
 }
