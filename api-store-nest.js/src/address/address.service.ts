@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,14 +11,15 @@ export class AddressService {
   constructor(
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
+    @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createAddressDto: CreateAddressDto, id: number) {
-    const user = await this.userRepository.findOneBy({ id });
+  async create(createAddressDto: CreateAddressDto, userId: number) {
+    const user = await this.userRepository.findOneByOrFail({ id: userId });
 
     if (!user) {
-      throw new NotFoundException(`User ${id} not found`);
+      throw new NotFoundException(`User ${userId} not found`);
     }
 
     const address = this.addressRepository.create({
