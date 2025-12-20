@@ -8,6 +8,7 @@ import {
   Delete,
   Res,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
@@ -33,8 +34,17 @@ export class AddressController {
   }
 
   @Get()
-  findAll() {
-    return this.addressService.findAll();
+  async findAll(
+    @Res() res: Response,
+    @Query('limit') limit: number = 10,
+    @Query('page') page: number = 1,
+  ) {
+    const address = await this.addressService.findAll(limit, page);
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: address,
+      message: 'Address all successfully :))',
+    });
   }
 
   @Get(':id')
