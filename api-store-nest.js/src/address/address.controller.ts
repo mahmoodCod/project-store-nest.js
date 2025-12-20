@@ -6,18 +6,30 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
+import { Response } from 'express';
 
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
   @Post()
-  create(@Body() createAddressDto: CreateAddressDto) {
-    return this.addressService.create(createAddressDto);
+  async create(
+    @Body() createAddressDto: CreateAddressDto,
+    @Res() res: Response,
+  ) {
+    const createAddress = await this.addressService.create(createAddressDto);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: createAddress,
+      message: 'Address created successfully :))',
+    });
   }
 
   @Get()
