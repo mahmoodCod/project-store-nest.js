@@ -14,7 +14,7 @@ export class Address {
   id: number;
 
   @Column({ nullable: false })
-  privince: string;
+  province: string;
 
   @Column({ nullable: false })
   city: string;
