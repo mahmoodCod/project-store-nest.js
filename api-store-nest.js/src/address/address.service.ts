@@ -38,7 +38,7 @@ export class AddressService {
     return await query.getMany();
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     const address = await this.addressRepository.findOneBy({ id });
 
     if (!address) {
