@@ -30,12 +30,8 @@ export class AddressService {
     return await this.addressRepository.save(address);
   }
 
-  async findAll(limit: number = 10, page: number = 1) {
-    const query = this.userRepository.createQueryBuilder('address');
-
-    query.skip((page - 1) * limit).take(limit);
-
-    return await query.getMany();
+  async findAll(): Promise<Address[]> {
+    return await this.addressRepository.find({ relations: ['user'] });
   }
 
   async findOne(id: number) {
