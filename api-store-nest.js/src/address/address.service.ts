@@ -39,7 +39,13 @@ export class AddressService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} address`;
+    const address = await this.addressRepository.findOneBy({ id });
+
+    if (!address) {
+      throw new NotFoundException(`Address ${id} not found !!`);
+    }
+
+    return address;
   }
 
   update(id: number, updateAddressDto: UpdateAddressDto) {
