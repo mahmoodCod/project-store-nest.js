@@ -34,12 +34,8 @@ export class AddressController {
   }
 
   @Get()
-  async findAll(
-    @Res() res: Response,
-    @Query('limit') limit: number = 10,
-    @Query('page') page: number = 1,
-  ) {
-    const address = await this.addressService.findAll(limit, page);
+  async findAll(@Res() res: Response) {
+    const address = await this.addressService.findAll();
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: address,
