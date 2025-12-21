@@ -60,7 +60,15 @@ export class AddressService {
     return this.addressRepository.findOneBy({ id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} address`;
+  async remove(id: number) {
+    const address = await this.addressRepository.findOneBy({ id });
+
+    if (!address) {
+      throw new NotFoundException(`Address ${id} not found !!`);
+    }
+
+    const removeAddress = await this.addressRepository.delete(id);
+
+    return removeAddress;
   }
 }
