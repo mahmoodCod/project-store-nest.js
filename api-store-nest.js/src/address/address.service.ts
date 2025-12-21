@@ -48,8 +48,16 @@ export class AddressService {
     return address;
   }
 
-  update(id: number, updateAddressDto: UpdateAddressDto) {
-    return `This action updates a #${id} address`;
+  async update(id: number, updateAddressDto: UpdateAddressDto) {
+    const address = await this.addressRepository.findOneBy({ id });
+
+    if (!address) {
+      throw new NotFoundException(`Address ${id} not found !!`);
+    }
+
+    await this.addressRepository.update(id, updateAddressDto);
+
+    return this.addressRepository.findOneBy({ id });
   }
 
   remove(id: number) {
