@@ -48,8 +48,13 @@ export class AddressController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.addressService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const getAddress = await this.addressService.findOne(+id);
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: getAddress,
+      message: 'Address get successfully :))',
+    });
   }
 
   @Patch(':id')
