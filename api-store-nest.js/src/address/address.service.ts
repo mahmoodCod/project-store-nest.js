@@ -34,8 +34,11 @@ export class AddressService {
     return await this.addressRepository.find({ relations: ['user'] });
   }
 
-  async findOne(id: number) {
-    const address = await this.addressRepository.findOneBy({ id });
+  async findOne(id: number): Promise<Address> {
+    const address = await this.addressRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
 
     if (!address) {
       throw new NotFoundException(`Address ${id} not found !!`);
