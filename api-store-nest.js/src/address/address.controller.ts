@@ -75,7 +75,12 @@ export class AddressController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.addressService.remove(+id);
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    const removeAddress = await this.addressService.remove(+id);
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: removeAddress,
+      message: 'Address removed successfully :))',
+    });
   }
 }
