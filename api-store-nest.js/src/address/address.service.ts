@@ -15,11 +15,13 @@ export class AddressService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createAddressDto: CreateAddressDto, userId: number) {
-    const user = await this.userRepository.findOneByOrFail({ id: userId });
+  async create(createAddressDto: CreateAddressDto) {
+    const user = await this.userRepository.findOneByOrFail({
+      id: createAddressDto.userId,
+    });
 
     if (!user) {
-      throw new NotFoundException(`User ${userId} not found`);
+      throw new NotFoundException(`User ${createAddressDto.userId} not found`);
     }
 
     const address = this.addressRepository.create({
