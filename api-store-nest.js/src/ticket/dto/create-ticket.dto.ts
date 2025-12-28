@@ -1,9 +1,6 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateTicketDto {
-  @IsNotEmpty({ message: 'UserId id required' })
-  userId: number;
-
   @IsString({ message: 'Title must be a string' })
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
@@ -15,4 +12,10 @@ export class CreateTicketDto {
   @IsString({ message: 'Description must be a string' })
   @IsNotEmpty({ message: 'Description is required' })
   description: string;
+
+  @IsNotEmpty({ message: 'UserId id required' })
+  userId: number;
+
+  @IsOptional()
+  replyTo: number;
 }
