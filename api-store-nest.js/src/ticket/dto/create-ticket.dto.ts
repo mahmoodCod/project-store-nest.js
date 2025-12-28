@@ -1,6 +1,9 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateTicketDto {
+  @IsNotEmpty({ message: 'UserId id required' })
+  userId: number;
+
   @IsString({ message: 'Title must be a string' })
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
