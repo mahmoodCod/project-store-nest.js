@@ -51,7 +51,12 @@ export class TicketService {
   }
 
   async findAll() {
-    return await this.ticketRepository.find({ relations: ['replyTo', 'user'] });
+    const ticket = await this.ticketRepository
+      .createQueryBuilder('ticket')
+      .where('ticket.replyTo Is Null')
+      .getMany();
+
+    return ticket;
   }
 
   findOne(id: number) {
