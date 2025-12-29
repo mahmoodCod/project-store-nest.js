@@ -3,30 +3,33 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ticket } from './entities/ticket.entity';
-import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class TicketService {
   constructor(
     @InjectRepository(Ticket)
     private readonly ticketRepository: Repository<Ticket>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
   ) {}
 
-  async create(createTicketDto: CreateTicketDto) {
-    const user = await this.userRepository.findOneByOrFail({
-      id: createTicketDto.userId,
-    });
+  async create(createTicketDto: CreateTicketDto): Promise<Ticket> {
+    const { userId, replyTo, ...ticketDto } = createTicketDto;
+    const user = await this.userService.findOne(userId);
 
     if (!user) {
       throw new NotFoundException(`User ${createTicketDto.userId} not found`);
     }
 
+    const replyToTicket = await this.ticketRepository.findOneByOrFail({
+      id: replyTo,
+    });
+
     const ticket = this.ticketRepository.create({
-      ...createTicketDto,
+      ...ticketDto,
       user,
+      replyTo: replyToTicket,
     });
 
     return await this.ticketRepository.save(ticket);
