@@ -40,8 +40,13 @@ export class TicketController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const getTicket = await this.ticketService.findOne(+id);
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: getTicket,
+      message: 'Ticket get successfully :))',
+    });
   }
 
   @Patch(':id')
