@@ -14,7 +14,7 @@ export class TicketService {
     private readonly userService: UserService,
   ) {}
 
-  async create(createTicketDto: CreateTicketDto): Promise<Ticket> {
+  async create(createTicketDto: CreateTicketDto) {
     const { userId, replyTo, ...ticketDto } = createTicketDto;
     const user = await this.userService.findOne(userId);
 
