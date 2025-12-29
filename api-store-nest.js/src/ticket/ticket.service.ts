@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,15 +28,23 @@ export class TicketService {
 
     let replyToTicket: Ticket | undefined;
     if (replyTo) {
-      replyToTicket = await this.ticketRepository.findOneByOrFail({
-        id: replyTo,
+      const foundTicket = await this.ticketRepository.findOne({
+        where: { id: replyTo },
+        relations: ['replyTo'],
       });
+      if (!foundTicket) {
+        throw new NotFoundException(`Ticket ${replyTo} not found`);
+      }
+      if (foundTicket.replyTo) {
+        throw new BadRequestException('Reply to ticket is already a reply');
+      }
+      replyToTicket = foundTicket;
     }
 
     const ticket = this.ticketRepository.create({
       ...ticketDto,
       user,
-      replyTo: replyToTicket,
+      ...(replyToTicket && { replyTo: replyToTicket }),
     });
 
     return await this.ticketRepository.save(ticket);
