@@ -51,7 +51,7 @@ export class TicketService {
   }
 
   async findAll() {
-    return await this.ticketRepository.find({ relations: ['replyTo'] });
+    return await this.ticketRepository.find({ relations: ['replyTo', 'user'] });
   }
 
   findOne(id: number) {
