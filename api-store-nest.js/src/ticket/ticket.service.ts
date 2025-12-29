@@ -50,8 +50,8 @@ export class TicketService {
     return await this.ticketRepository.save(ticket);
   }
 
-  findAll() {
-    return `This action returns all ticket`;
+  async findAll() {
+    return await this.ticketRepository.find({ relations: ['replyTo'] });
   }
 
   findOne(id: number) {
