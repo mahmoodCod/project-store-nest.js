@@ -22,9 +22,12 @@ export class TicketService {
       throw new NotFoundException(`User ${createTicketDto.userId} not found`);
     }
 
-    const replyToTicket = await this.ticketRepository.findOneByOrFail({
-      id: replyTo,
-    });
+    let replyToTicket: Ticket | undefined;
+    if (replyTo) {
+      replyToTicket = await this.ticketRepository.findOneByOrFail({
+        id: replyTo,
+      });
+    }
 
     const ticket = this.ticketRepository.create({
       ...ticketDto,
