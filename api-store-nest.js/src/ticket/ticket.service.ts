@@ -59,8 +59,17 @@ export class TicketService {
     return ticket;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ticket`;
+  async findOne(id: number) {
+    const ticket = await this.ticketRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!ticket) {
+      throw new NotFoundException(`Ticket ${id} not found !!`);
+    }
+
+    return ticket;
   }
 
   update(id: number, updateTicketDto: UpdateTicketDto) {
