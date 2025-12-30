@@ -1,7 +1,9 @@
+import { Category } from 'src/category/entities/category.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -19,7 +21,7 @@ export class Product {
   @Column()
   description: string;
 
-  @Column({ default: 1 })
+  @Column({ nullable: false })
   stock: number;
 
   @CreateDateColumn()
@@ -27,4 +29,6 @@ export class Product {
 
   @CreateDateColumn()
   updatedAt: Date;
+
+//   @ManyToMany(() => Category, (category) => category.product)
 }
