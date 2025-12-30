@@ -7,6 +7,8 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AddressModule } from './address/address.module';
 import { TicketModule } from './ticket/ticket.module';
+import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   //config
@@ -30,6 +32,8 @@ import { TicketModule } from './ticket/ticket.module';
     AuthModule,
     AddressModule,
     TicketModule,
+    ProductModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
