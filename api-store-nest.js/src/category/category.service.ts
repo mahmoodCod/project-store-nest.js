@@ -17,8 +17,8 @@ export class CategoryService {
     return await this.categoryRepository.save(category);
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll(): Promise<Category[]> {
+    return await this.categoryRepository.find({ relations: ['product'] });
   }
 
   findOne(id: number) {
