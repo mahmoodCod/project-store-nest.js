@@ -33,8 +33,14 @@ export class CategoryController {
   }
 
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  async findAll(@Res() res: Response) {
+    const category = await this.categoryService.findAll();
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: category,
+      message: 'Category all successfully :))',
+    });
   }
 
   @Get(':id')
