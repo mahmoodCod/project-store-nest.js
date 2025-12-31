@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -31,5 +32,10 @@ export class Product {
   updatedAt: Date;
 
   @ManyToMany(() => Category, (category) => category.product)
+  @JoinTable({
+    name: 'product_category',
+    joinColumn: { name: 'product_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'category_id', referencedColumnName: 'id' },
+  })
   categories: Category[];
 }
