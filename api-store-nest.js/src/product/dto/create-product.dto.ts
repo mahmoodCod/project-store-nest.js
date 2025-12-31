@@ -15,5 +15,5 @@ export class CreateProductDto {
 
   @IsOptional()
   @IsArray({ message: 'Category ids must be an array' })
-  categoryIds: number;
+  categoryIds?: number[];
 }
