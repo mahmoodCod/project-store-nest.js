@@ -30,5 +30,6 @@ export class Product {
   @CreateDateColumn()
   updatedAt: Date;
 
-//   @ManyToMany(() => Category, (category) => category.product)
+  @ManyToMany(() => Category, (category) => category.product)
+  categories: Category[];
 }
