@@ -33,8 +33,14 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  async findAll(@Res() res: Response) {
+    const products = await this.productService.findAll();
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: products,
+      message: 'Product all successfully :))',
+    });
   }
 
   @Get(':id')
