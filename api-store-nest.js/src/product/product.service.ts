@@ -16,8 +16,12 @@ export class ProductService {
     return await this.productRepository.save(createProduct);
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll() {
+    const products = await this.productRepository.find({
+      relations: ['category'],
+    });
+
+    return products;
   }
 
   findOne(id: number) {
