@@ -37,8 +37,16 @@ export class ProductService {
     return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const product = await this.productRepository.findOneBy({ id });
+
+    if (!product) {
+      throw new NotFoundException(`Product ${id} not found !!`);
+    }
+
+    await this.productRepository.update(id, updateProductDto);
+
+    return this.productRepository.findOneBy({ id });
   }
 
   remove(id: number) {
