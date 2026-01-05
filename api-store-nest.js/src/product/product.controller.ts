@@ -55,8 +55,21 @@ export class ProductController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @Res() res: Response,
+  ) {
+    const updateProduct = await this.productService.update(
+      +id,
+      updateProductDto,
+    );
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: updateProduct,
+      message: 'Product updated successfully :))',
+    });
   }
 
   @Delete(':id')
