@@ -6,6 +6,7 @@ import {
   Res,
   HttpStatus,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -48,6 +49,16 @@ export class CategoryController {
       statusCode: HttpStatus.OK,
       data: category,
       message: 'Category get successfully :))',
+    });
+  }
+
+  @Delete('remove-only-category/:id')
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    await this.categoryService.removeOnlyCategory(+id);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      message: 'Category removed successfully :))',
     });
   }
 }
