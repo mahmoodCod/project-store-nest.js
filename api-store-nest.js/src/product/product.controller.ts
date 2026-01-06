@@ -73,7 +73,13 @@ export class ProductController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    const removeProduct = await this.productService.remove(+id);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: removeProduct,
+      message: 'Product removed successfully :))',
+    });
   }
 }
