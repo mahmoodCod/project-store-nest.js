@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Res, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Res,
+  HttpStatus,
+  Param,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Response } from 'express';
@@ -29,6 +37,17 @@ export class CategoryController {
       statusCode: HttpStatus.OK,
       data: category,
       message: 'Category all successfully :))',
+    });
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const category = await this.categoryService.findOne(+id);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: category,
+      message: 'Category get successfully :))',
     });
   }
 }
