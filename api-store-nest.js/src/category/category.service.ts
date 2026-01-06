@@ -16,6 +16,10 @@ export class CategoryService {
     return await this.categoryRepository.save(category);
   }
 
+  async findAll(): Promise<Category[]> {
+    return await this.categoryRepository.find({ relations: ['product'] });
+  }
+
   async findOne(id: number): Promise<Category> {
     const category = await this.categoryRepository.findOne({
       where: { id },
@@ -29,7 +33,12 @@ export class CategoryService {
     return category;
   }
 
-  async findAll(): Promise<Category[]> {
-    return await this.categoryRepository.find({ relations: ['product'] });
+  async removeOnlyCategory(id: number): Promise<void> {
+    const category: Category = await this.findOne(id);
+
+    category.product = [];
+    await this.categoryRepository.save(category);
+
+    await this.categoryRepository.remove(category);
   }
 }
