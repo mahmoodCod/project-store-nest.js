@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Category } from 'src/category/entities/category.entity';
 
 @Injectable()
@@ -16,7 +16,21 @@ export class ProductService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
   async create(createProductDto: CreateProductDto): Promise<Product> {
-    const createProduct = this.productRepository.create(createProductDto);
+    const { title, price, description, stock, categoryIds } = createProductDto;
+    const createProduct = this.productRepository.create({
+      title,
+      price,
+      description,
+      stock,
+    });
+
+    if (categoryIds) {
+      const categoryes = await this.categoryRepository.findBy({
+        id: In(categoryIds),
+      });
+      createProduct.categories = categoryes;
+    }
+
     return await this.productRepository.save(createProduct);
   }
 
