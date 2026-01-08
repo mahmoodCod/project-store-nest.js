@@ -61,4 +61,14 @@ export class CategoryController {
       message: 'Category removed successfully :))',
     });
   }
+
+  @Delete('save-remove/:id')
+  async safeRemove(@Param('id') id: string, @Res() res: Response) {
+    await this.categoryService.safeRemove(+id);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      message: 'Category removed successfully :))',
+    });
+  }
 }
