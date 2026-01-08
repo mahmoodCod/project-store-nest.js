@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { In, Repository } from 'typeorm';
 import { Category } from 'src/category/entities/category.entity';
+import { BookmarkProduct } from './entities/product-bookmark.entity';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class ProductService {
@@ -14,6 +16,10 @@ export class ProductService {
 
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+
+    @InjectRepository(BookmarkProduct)
+    private readonly bookmarkProductRepository: Repository<BookmarkProduct>,
+    private readonly userService: UserService,
   ) {}
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const { title, price, description, stock, categoryIds } = createProductDto;
@@ -77,5 +83,33 @@ export class ProductService {
     const removeProduct = await this.productRepository.delete(id);
 
     return removeProduct;
+  }
+
+  async toggleBookmark(
+    userId: number,
+    productId: number,
+  ): Promise<BookmarkProduct | void> {
+    const user = await this.userService.findOne(userId);
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+    });
+
+    if (!user || !product) {
+      throw new Error('user || product not found');
+    }
+
+    const exsistingBookmark = await this.bookmarkProductRepository.findOne({
+      where: { user: user, product: product },
+    });
+
+    if (exsistingBookmark) {
+      await this.bookmarkProductRepository.remove(exsistingBookmark);
+    } else {
+      const newBookmark = this.bookmarkProductRepository.create({
+        user: user,
+        product: product,
+      });
+      await this.bookmarkProductRepository.save(newBookmark);
+    }
   }
 }
