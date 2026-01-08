@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('bookmark_Product')
+@Entity()
 export class BookmarkProduct {
   @PrimaryGeneratedColumn()
   id: number;
