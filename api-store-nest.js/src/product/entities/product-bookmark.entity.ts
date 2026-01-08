@@ -1,13 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from './product.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity()
 export class BookmarkProduct {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'bigint' })
-  productId: number;
+  @ManyToOne(() => Product, (product) => product.bookmarks)
+  @JoinColumn({ name: 'productId' })
+  product: Product;
 
-  @Column({ type: 'bigint' })
-  userId: number;
+  @ManyToOne(() => User, (user) => user.bookmarks)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 }
