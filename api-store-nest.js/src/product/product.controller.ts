@@ -13,6 +13,7 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Response } from 'express';
+import { BookmarkProductDto } from './dto/bookmark-product.dto';
 
 @Controller('product')
 export class ProductController {
@@ -29,6 +30,23 @@ export class ProductController {
       statusCode: HttpStatus.OK,
       data: createProduct,
       message: 'Product created successfully :))',
+    });
+  }
+
+  @Post('bookMark-product')
+  async bookMarkProduct(
+    @Body() bookMarkProduct: BookmarkProductDto,
+    @Res() res: Response,
+  ) {
+    const bookMarkData = await this.productService.toggleBookmark(
+      bookMarkProduct.userId,
+      bookMarkProduct.productId,
+    );
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: bookMarkData,
+      message: 'Product bookMark successfully :))',
     });
   }
 
