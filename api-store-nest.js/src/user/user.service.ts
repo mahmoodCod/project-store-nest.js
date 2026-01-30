@@ -78,6 +78,12 @@ export class UserService {
     return this.userRepository.findOneBy({ id });
   }
 
+  async addProductToBasket(userId, product) {
+    const user = await this.findOne(userId);
+
+    user.basket_items.push(product);
+  }
+
   async remove(id: number) {
     const users = await this.userRepository.findOneBy({ id });
 

@@ -115,4 +115,12 @@ export class ProductService {
       await this.bookmarkProductRepository.save(newBookmark);
     }
   }
+
+  async addItemToBasket(userId: number, productId: number) {
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+    });
+
+    return await this.userService.addProductToBasket(userId, product);
+  }
 }
