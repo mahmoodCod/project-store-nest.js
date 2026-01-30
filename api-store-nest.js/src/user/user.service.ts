@@ -79,9 +79,18 @@ export class UserService {
   }
 
   async addProductToBasket(userId, product) {
-    const user = await this.findOne(userId);
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['basket_items'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     user.basket_items.push(product);
+
+    return await this.userRepository.save(user);
   }
 
   async remove(id: number) {
