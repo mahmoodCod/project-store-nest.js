@@ -95,11 +95,14 @@ export class ProductService {
     });
 
     if (!user || !product) {
-      throw new Error('user || product not found');
+      throw new NotFoundException('user || product not found');
     }
 
     const exsistingBookmark = await this.bookmarkProductRepository.findOne({
-      where: { user: user, product: product },
+      where: {
+        user: { id: user.id },
+        product: { id: product.id },
+      },
     });
 
     if (exsistingBookmark) {
