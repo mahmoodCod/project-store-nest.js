@@ -100,7 +100,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new Error('User not found !!');
+      throw new NotFoundException('User not found !!');
     }
 
     const productIndex = user.basket_items.findIndex(
@@ -108,7 +108,7 @@ export class UserService {
     );
 
     if (productIndex === -1) {
-      throw new Error('Product not found in the basket');
+      throw new NotFoundException('Product not found in the basket');
     }
 
     user.basket_items.splice(productIndex, 1);
