@@ -50,6 +50,23 @@ export class ProductController {
     });
   }
 
+  @Post('add-basket')
+  async addProductToBasket(
+    @Body() bookMarkProduct: BookmarkProductDto,
+    @Res() res: Response,
+  ) {
+    const bookMarkData = await this.productService.addItemToBasket(
+      bookMarkProduct.userId,
+      bookMarkProduct.productId,
+    );
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: bookMarkData,
+      message: 'Product add to basket successfully :))',
+    });
+  }
+
   @Get()
   async findAll(@Res() res: Response) {
     const products = await this.productService.findAll();
