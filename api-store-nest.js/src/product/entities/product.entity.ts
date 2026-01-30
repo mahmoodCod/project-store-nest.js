@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BookmarkProduct } from './product-bookmark.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity('product')
 export class Product {
@@ -40,6 +41,9 @@ export class Product {
     inverseJoinColumn: { name: 'category_id', referencedColumnName: 'id' },
   })
   categories: Category[];
+
+  @ManyToMany(() => User, (user) => user.basket_items)
+  baskets: Category[];
 
   @OneToMany(() => BookmarkProduct, (bookmark) => bookmark.product)
   bookmarks: BookmarkProduct[];

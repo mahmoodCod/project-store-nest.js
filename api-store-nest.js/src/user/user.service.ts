@@ -78,6 +78,44 @@ export class UserService {
     return this.userRepository.findOneBy({ id });
   }
 
+  async addProductToBasket(userId, product) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['basket_items'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.basket_items.push(product);
+
+    return await this.userRepository.save(user);
+  }
+
+  async removeProductFromBasket(userId: number, productId: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['basket_items'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found !!');
+    }
+
+    const productIndex = user.basket_items.findIndex(
+      (item) => item.id === productId,
+    );
+
+    if (productIndex === -1) {
+      throw new NotFoundException('Product not found in the basket');
+    }
+
+    user.basket_items.splice(productIndex, 1);
+
+    return await this.userRepository.save(user);
+  }
+
   async remove(id: number) {
     const users = await this.userRepository.findOneBy({ id });
 
