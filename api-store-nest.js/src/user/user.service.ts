@@ -93,7 +93,7 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async removeProductFromBasket(userId: number, product: number) {
+  async removeProductFromBasket(userId: number, productId: number) {
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['basket_items'],
@@ -104,7 +104,7 @@ export class UserService {
     }
 
     const productIndex = user.basket_items.findIndex(
-      (item) => item.id === product,
+      (item) => item.id === productId,
     );
 
     if (productIndex === -1) {

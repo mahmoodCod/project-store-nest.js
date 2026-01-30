@@ -129,6 +129,6 @@ export class ProductService {
       where: { id: productId },
     });
 
-    return await this.userService.removeProductFromBasket(userId, product);
+    return await this.userService.removeProductFromBasket(userId, productId);
   }
 }

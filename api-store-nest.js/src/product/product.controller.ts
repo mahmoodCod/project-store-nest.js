@@ -72,14 +72,13 @@ export class ProductController {
     @Body() bookMarkProduct: BookmarkProductDto,
     @Res() res: Response,
   ) {
-    const bookMarkData = await this.productService.removeItemFromBasket(
+    await this.productService.removeItemFromBasket(
       bookMarkProduct.userId,
       bookMarkProduct.productId,
     );
 
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
-      data: bookMarkData,
       message: 'Product removed to basket successfully :))',
     });
   }
