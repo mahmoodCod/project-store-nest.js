@@ -6,6 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { orderStatus } from '../enum/order-status.enum';
+import { Address } from 'src/address/entities/address.entity';
 
 @Entity('orders')
 export class Order {
@@ -18,14 +20,15 @@ export class Order {
 
   @Column({
     type: 'enum',
-    enum: ['pending', 'compeleted', 'canselleded'],
-    default: 'pending',
+    enum: orderStatus,
+    default: orderStatus.PENDING,
   })
-  status: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  set_time: Date;
+  status: orderStatus;
 
   @Column({ type: 'timestamp', nullable: true })
   payed_time: Date;
+
+  @ManyToOne(() => Address, (address) => address.orders)
+  @JoinColumn({ name: 'addressId' })
+  address: Address;
 }
