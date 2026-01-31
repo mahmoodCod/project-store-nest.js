@@ -64,8 +64,17 @@ export class OrderService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  async findOne(id: number): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['user', 'address', 'items', 'items.product'],
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found !!');
+    }
+
+    return order;
   }
 
   async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
