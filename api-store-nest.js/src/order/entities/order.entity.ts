@@ -1,10 +1,12 @@
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { orderStatus } from '../enum/order-status.enum';
 import { Address } from 'src/address/entities/address.entity';
@@ -35,6 +37,16 @@ export class Order {
   @Column({ type: 'bigint' })
   total_price: number;
 
-  @Column({ type: 'bigint', nullable: true })
-  discount_code: number;
+  @Column({ type: 'varchar', nullable: true })
+  discount_code: string;
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 }
