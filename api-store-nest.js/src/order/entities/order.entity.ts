@@ -5,11 +5,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { orderStatus } from '../enum/order-status.enum';
 import { Address } from 'src/address/entities/address.entity';
+import { orderItem } from './order-item.entity';
 
 @Entity('orders')
 export class Order {
@@ -33,6 +35,9 @@ export class Order {
   @ManyToOne(() => Address, (address) => address.orders)
   @JoinColumn({ name: 'addressId' })
   address: Address;
+
+  @OneToMany(() => orderItem, (item) => item.order)
+  items: orderItem[];
 
   @Column({ type: 'bigint' })
   total_price: number;
