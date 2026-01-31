@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsNumber,
   IsOptional,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 import { orderStatus } from '../enum/order-status.enum';
@@ -34,9 +35,9 @@ export class CreateOrderDto {
   @IsNumber({}, { message: 'total_price must be a number' })
   total_price: number;
 
-  @IsNumber({}, { message: 'discount_code must be a number' })
+  @IsString({ message: 'discount_code must be a string' })
   @IsOptional()
-  discount_code?: number;
+  discount_code?: string;
 
   @IsArray({ message: 'Items must be an array' })
   @ValidateNested({ each: true })

@@ -1,12 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import { orderItem } from './entities/order-item.entity';
-import { User } from 'src/user/entities/user.entity';
-import { Address } from 'src/address/entities/address.entity';
+import { UserService } from 'src/user/user.service';
+import { AddressService } from 'src/address/address.service';
+import { ProductService } from 'src/product/product.service';
+import { orderStatus } from './enum/order-status.enum';
 
 @Injectable()
 export class OrderService {
@@ -17,36 +19,43 @@ export class OrderService {
     @InjectRepository(orderItem)
     private readonly orderItemRepository: Repository<orderItem>,
 
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
 
-    @InjectRepository(Address)
-    private readonly addressRepository: Repository<Address>,
+    private readonly addressService: AddressService,
+
+    private readonly productService: ProductService,
   ) {}
-  async create(createOrderDto: CreateOrderDto) {
-    const {
-      userId,
-      addressId,
-      items,
-      status,
-      payed_time,
-      total_price,
-      discount_code,
-    } = createOrderDto;
+  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+    const user = await this.userService.findOne(createOrderDto.userId);
 
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
+    const address = await this.addressService.findOne(createOrderDto.addressId);
+
+    const order = this.orderRepository.create({
+      user,
+      address,
+      status: createOrderDto.status || orderStatus.PENDING,
+      total_price: createOrderDto.total_price,
+      discount_code: createOrderDto.discount_code,
     });
-    if (!user) {
-      throw new NotFoundException('User not found');
+
+    const savedOrder = await this.orderRepository.save(order);
+
+    if (createOrderDto.items && createOrderDto.items.length > 0) {
+      const orderItems = createOrderDto.items.map(async (item) => {
+        const product = await this.productService.findOne(item.productId);
+
+        const orderItem = this.orderItemRepository.create({
+          order: savedOrder,
+          product,
+        });
+
+        return this.orderItemRepository.save(orderItem);
+      });
+
+      await Promise.all(orderItems);
     }
 
-    const address = await this.addressRepository.findOne({
-      where: { id: addressId },
-    });
-    if (!address) {
-      throw new NotFoundException('Address not found');
-    }
+    return savedOrder;
   }
 
   findAll() {

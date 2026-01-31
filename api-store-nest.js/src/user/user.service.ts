@@ -45,7 +45,7 @@ export class UserService {
     return await query.getMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<User> {
     const users = await this.userRepository.findOneBy({ id });
 
     if (!users) {
