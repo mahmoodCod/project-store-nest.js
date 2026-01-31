@@ -9,6 +9,7 @@ import { AddressModule } from './address/address.module';
 import { TicketModule } from './ticket/ticket.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   //config
@@ -34,6 +35,7 @@ import { CategoryModule } from './category/category.module';
     TicketModule,
     ProductModule,
     CategoryModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
