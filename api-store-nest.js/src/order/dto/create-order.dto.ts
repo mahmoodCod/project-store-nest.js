@@ -1,5 +1,14 @@
-import { IsDateString, IsEnum, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { orderStatus } from '../enum/order-status.enum';
+import { Type } from 'class-transformer';
+import { createOrderItemDto } from './create-order-item.dto';
 
 export class CreateOrderDto {
   @IsNumber({}, { message: 'userId must be a number' })
@@ -28,4 +37,9 @@ export class CreateOrderDto {
   @IsNumber({}, { message: 'discount_code must be a number' })
   @IsOptional()
   discount_code?: number;
+
+  @IsArray({ message: 'Items must be an array' })
+  @ValidateNested({ each: true })
+  @Type(() => createOrderItemDto)
+  items: createOrderItemDto[];
 }
