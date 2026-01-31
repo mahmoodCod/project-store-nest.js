@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -66,8 +66,32 @@ export class OrderService {
     return `This action returns a #${id} order`;
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
+    const order = await this.orderRepository.findOne({ where: { id } });
+    if (!order) {
+      throw new NotFoundException('Order not found !!');
+    }
+
+    if (updateOrderDto.status) {
+      order.status = updateOrderDto.status;
+    }
+
+    if (updateOrderDto.total_price) {
+      order.total_price = updateOrderDto.total_price;
+    }
+
+    if (updateOrderDto.discount_code) {
+      order.discount_code = updateOrderDto.discount_code;
+    }
+
+    if (updateOrderDto.addressId) {
+      const address = await this.addressService.findOne(
+        updateOrderDto.addressId,
+      );
+      order.address = address;
+    }
+
+    return this.orderRepository.save(order);
   }
 
   remove(id: number) {
