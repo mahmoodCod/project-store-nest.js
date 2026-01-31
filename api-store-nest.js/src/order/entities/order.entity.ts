@@ -31,4 +31,10 @@ export class Order {
   @ManyToOne(() => Address, (address) => address.orders)
   @JoinColumn({ name: 'addressId' })
   address: Address;
+
+  @Column({ type: 'bigint' })
+  total_price: number;
+
+  @Column({ type: 'bigint', nullable: true })
+  discount_code: number;
 }
