@@ -58,8 +58,10 @@ export class OrderService {
     return savedOrder;
   }
 
-  findAll() {
-    return `This action returns all order`;
+  async findAll(): Promise<Order[]> {
+    return this.orderRepository.find({
+      relations: ['user', 'address', 'items', 'items.product'],
+    });
   }
 
   findOne(id: number) {
