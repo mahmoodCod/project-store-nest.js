@@ -105,7 +105,24 @@ export class OrderService {
     return this.orderRepository.save(order);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async remove(id: number): Promise<{ message: string }> {
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['items'],
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found !!');
+    }
+
+    if (order.items && order.items.length > 0) {
+      await this.orderItemRepository.remove(order.items);
+    }
+
+    await this.orderRepository.remove(order);
+
+    return {
+      message: 'Order deleted successfully',
+    };
   }
 }
