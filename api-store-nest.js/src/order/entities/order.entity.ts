@@ -27,5 +27,5 @@ export class Order {
   set_time: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-
+  payed_time: Date;
 }
