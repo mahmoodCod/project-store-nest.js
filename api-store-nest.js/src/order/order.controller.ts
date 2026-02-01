@@ -1,34 +1,79 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpStatus,
+  Res,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { Response } from 'express';
 
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
+  async create(@Body() createOrderDto: CreateOrderDto, @Res() res: Response) {
+    const order = await this.orderService.create(createOrderDto);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: order,
+      message: 'Order created successfully :))',
+    });
   }
 
   @Get()
-  findAll() {
-    return this.orderService.findAll();
+  async findAll(@Res() res: Response) {
+    const allOrders = await this.orderService.findAll();
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: allOrders,
+      message: 'Order all successfully :))',
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const getOrder = await this.orderService.findOne(+id);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: getOrder,
+      message: 'Get Orders successfully :))',
+    });
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(+id, updateOrderDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+    @Res() res: Response,
+  ) {
+    const updateOrder = await this.orderService.update(+id, updateOrderDto);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: updateOrder,
+      message: 'Order updated successfully :))',
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderService.remove(+id);
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    const removeOrder = await this.orderService.remove(+id);
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: removeOrder,
+      message: 'Order remove successfully :))',
+    });
   }
 }
