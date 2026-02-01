@@ -32,9 +32,6 @@ export class CreateOrderDto {
   @IsNumber({}, { message: 'addressId must be a number' })
   addressId: number;
 
-  @IsNumber({}, { message: 'total_price must be a number' })
-  total_price: number;
-
   @IsString({ message: 'discount_code must be a string' })
   @IsOptional()
   discount_code?: string;

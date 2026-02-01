@@ -39,7 +39,7 @@ export class Order {
   @OneToMany(() => orderItem, (item) => item.order)
   items: orderItem[];
 
-  @Column({ type: 'bigint' })
+  @Column({ type: 'bigint', default: 0 })
   total_price: number;
 
   @Column({ type: 'varchar', nullable: true })
