@@ -87,7 +87,7 @@ export class OrderController {
     @Res() res: Response,
   ) {
     const responsePay = await this.orderService.startPayment(
-      paymentOrderDto.amount,
+      paymentOrderDto.orderId,
     );
 
     return res.status(HttpStatus.OK).json({
@@ -107,6 +107,7 @@ export class OrderController {
   ) {
     const responsePay = await this.orderService.verifyPayment(
       verifyPayment.trackId,
+      verifyPayment.orderId,
     );
 
     return res.status(HttpStatus.OK).json({

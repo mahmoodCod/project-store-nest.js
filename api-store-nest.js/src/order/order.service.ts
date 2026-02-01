@@ -144,20 +144,22 @@ export class OrderService {
     };
   }
 
-  async startPayment(amount: number) {
+  async startPayment(orderId: number) {
+    const order = await this.findOne(orderId);
     const request = this.httpService.post(
       'https://gateway.zibal.ir/v1/request',
       {
         merchant: 'zibal',
-        amount: amount * 10,
+        amount: order.total_price * 10,
         callbackUrl: 'http://localhost',
+        orderId: 2
       },
     );
     const responseBody = await lastValueFrom(request);
     return responseBody.data;
   }
 
-  async verifyPayment(trackId: number) {
+  async verifyPayment(trackId: number, orderId: number) {
     const request = this.httpService.post(
       'https://gateway.zibal.ir/v1/verify',
       {
@@ -166,6 +168,12 @@ export class OrderService {
       },
     );
     const responseBody = await lastValueFrom(request);
+
+    if (responseBody.data.result === 100) {
+      const order = await this.findOne(orderId);
+      order.status = orderStatus.COMPELETED,
+        await this.orderRepository.save(order),
+    }
     return responseBody.data;
   }
 }
