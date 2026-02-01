@@ -156,4 +156,16 @@ export class OrderService {
     const responseBody = await lastValueFrom(request);
     return responseBody.data;
   }
+
+  async verifyPayment(trackId: number) {
+    const request = this.httpService.post(
+      'https://gateway.zibal.ir/v1/verify',
+      {
+        merchant: 'zibal',
+        trackId: trackId,
+      },
+    );
+    const responseBody = await lastValueFrom(request);
+    return responseBody.data;
+  }
 }

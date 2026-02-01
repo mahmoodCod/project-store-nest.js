@@ -16,6 +16,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Response } from 'express';
 import { PaymentOrderDto } from './dto/payment-order.dto';
+import { verifyPayment } from './dto/verify-payment.dto';
 
 @Controller('order')
 export class OrderController {
@@ -87,6 +88,25 @@ export class OrderController {
   ) {
     const responsePay = await this.orderService.startPayment(
       paymentOrderDto.amount,
+    );
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        ...responsePay,
+        payment_url: `https://gateway.zibal.ir/start/${responsePay.trackId}`,
+      },
+      message: 'Order remove successfully :))',
+    });
+  }
+
+  @Post('verify-payment')
+  async verifyPayment(
+    @Body() verifyPayment: verifyPayment,
+    @Res() res: Response,
+  ) {
+    const responsePay = await this.orderService.verifyPayment(
+      verifyPayment.trackId,
     );
 
     return res.status(HttpStatus.OK).json({
