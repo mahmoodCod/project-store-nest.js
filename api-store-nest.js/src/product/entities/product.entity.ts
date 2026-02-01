@@ -7,6 +7,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { BookmarkProduct } from './product-bookmark.entity';
 import { User } from 'src/user/entities/user.entity';
@@ -29,9 +30,9 @@ export class Product {
   stock: number;
 
   @CreateDateColumn()
-  cretedAt: Date;
+  createdAt: Date;
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToMany(() => Category, (category) => category.product)
@@ -43,7 +44,7 @@ export class Product {
   categories: Category[];
 
   @ManyToMany(() => User, (user) => user.basket_items)
-  baskets: Category[];
+  baskets: User[];
 
   @OneToMany(() => BookmarkProduct, (bookmark) => bookmark.product)
   bookmarks: BookmarkProduct[];
