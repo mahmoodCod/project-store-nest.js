@@ -7,6 +7,7 @@ import { orderItem } from './entities/order-item.entity';
 import { ProductModule } from 'src/product/product.module';
 import { UserModule } from 'src/user/user.module';
 import { AddressModule } from 'src/address/address.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AddressModule } from 'src/address/address.module';
     ProductModule,
     UserModule,
     AddressModule,
+    HttpModule,
   ],
   controllers: [OrderController],
   providers: [OrderService],

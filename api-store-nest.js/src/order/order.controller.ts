@@ -13,6 +13,7 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Response } from 'express';
+import { PaymentOrderDto } from './dto/payment-order.dto';
 
 @Controller('order')
 export class OrderController {
@@ -75,5 +76,12 @@ export class OrderController {
       data: removeOrder,
       message: 'Order remove successfully :))',
     });
+  }
+
+  @Post('start-payment')
+  startPayment(@Body() paymentOrderDto: PaymentOrderDto) {
+    const startPayment = this.orderService.startPayment(paymentOrderDto.amount);
+
+    return startPayment;
   }
 }

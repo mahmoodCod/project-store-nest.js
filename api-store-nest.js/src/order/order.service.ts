@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -9,6 +10,8 @@ import { UserService } from 'src/user/user.service';
 import { AddressService } from 'src/address/address.service';
 import { ProductService } from 'src/product/product.service';
 import { orderStatus } from './enum/order-status.enum';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class OrderService {
@@ -24,6 +27,8 @@ export class OrderService {
     private readonly addressService: AddressService,
 
     private readonly productService: ProductService,
+
+    private readonly httpService: HttpService,
   ) {}
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     const user = await this.userService.findOne(createOrderDto.userId);
@@ -137,5 +142,18 @@ export class OrderService {
     return {
       message: 'Order deleted successfully',
     };
+  }
+
+  async startPayment(amount: number) {
+    const request = this.httpService.post(
+      'https://gateway.zibal.ir/v1/request',
+      {
+        merchant: 'zibal',
+        amount: amount * 10,
+        callbackUrl: 'http://localhost',
+      },
+    );
+    const responseBody = await lastValueFrom(request);
+    return responseBody.data;
   }
 }
