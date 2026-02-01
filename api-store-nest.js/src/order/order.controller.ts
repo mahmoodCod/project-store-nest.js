@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Controller,
   Get,
@@ -79,9 +81,21 @@ export class OrderController {
   }
 
   @Post('start-payment')
-  startPayment(@Body() paymentOrderDto: PaymentOrderDto) {
-    const startPayment = this.orderService.startPayment(paymentOrderDto.amount);
+  async startPayment(
+    @Body() paymentOrderDto: PaymentOrderDto,
+    @Res() res: Response,
+  ) {
+    const responsePay = await this.orderService.startPayment(
+      paymentOrderDto.amount,
+    );
 
-    return startPayment;
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        ...responsePay,
+        payment_url: `https://gateway.zibal.ir/start/${responsePay.trackId}`,
+      },
+      message: 'Order remove successfully :))',
+    });
   }
 }
