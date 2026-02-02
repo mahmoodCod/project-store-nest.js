@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -152,7 +153,7 @@ export class OrderService {
         merchant: 'zibal',
         amount: order.total_price * 10,
         callbackUrl: 'http://localhost',
-        orderId: 2
+        orderId: 2,
       },
     );
     const responseBody = await lastValueFrom(request);
@@ -171,8 +172,8 @@ export class OrderService {
 
     if (responseBody.data.result === 100) {
       const order = await this.findOne(orderId);
-      order.status = orderStatus.COMPELETED,
-        await this.orderRepository.save(order),
+      order.status = orderStatus.COMPELETED;
+      await this.orderRepository.save(order);
     }
     return responseBody.data;
   }
