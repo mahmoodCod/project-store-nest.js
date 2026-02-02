@@ -1,9 +1,11 @@
+import { Order } from 'src/order/entities/order.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -33,6 +35,9 @@ export class Address {
 
   @ManyToOne(() => User, (user) => user.address)
   user: User;
+
+  @OneToMany(() => User, (user) => user.address)
+  orders: Order[];
 
   @CreateDateColumn()
   createdAt: Date;

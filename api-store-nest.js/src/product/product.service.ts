@@ -42,7 +42,7 @@ export class ProductService {
 
   async findAll(): Promise<Product[]> {
     const products = await this.productRepository.find({
-      relations: ['category'],
+      relations: ['categories'],
     });
 
     return products;
@@ -51,7 +51,7 @@ export class ProductService {
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({
       where: { id },
-      relations: ['category'],
+      relations: ['categories'],
     });
 
     if (!product) {
