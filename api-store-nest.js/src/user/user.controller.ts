@@ -9,14 +9,17 @@ import {
   Res,
   HttpStatus,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
 import UserRoleEnum from './enum/userRoleEnum';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
+@ApiBearerAuth()
 @ApiTags('Management users')
 @Controller('user')
 export class UserController {
@@ -48,6 +51,7 @@ export class UserController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() res: Response) {
     const getUsers = await this.userService.findOne(+id);
