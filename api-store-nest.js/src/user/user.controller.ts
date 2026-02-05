@@ -15,7 +15,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
 import UserRoleEnum from './enum/userRoleEnum';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Management users')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
