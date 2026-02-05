@@ -15,11 +15,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
 import UserRoleEnum from './enum/userRoleEnum';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Management users')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiOperation({ summary: 'New create user' })
   @Post()
   async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     const createUser = await this.userService.create(createUserDto);

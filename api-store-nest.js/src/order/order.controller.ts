@@ -17,7 +17,9 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { Response } from 'express';
 import { PaymentOrderDto } from './dto/payment-order.dto';
 import { verifyPayment } from './dto/verify-payment.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Management orders')
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
