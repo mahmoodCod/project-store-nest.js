@@ -4,7 +4,9 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
+import { Public } from './decorators/public.decorators';
 
+@Public()
 @ApiTags('Management auth')
 @Controller('auth')
 export class AuthController {
