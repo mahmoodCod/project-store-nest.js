@@ -16,6 +16,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
 import UserRoleEnum from './enum/userRoleEnum';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorators';
 
 @ApiBearerAuth()
 @ApiTags('Management users')
@@ -23,6 +24,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Roles(UserRoleEnum.Admin, UserRoleEnum.Moderator)
   @ApiOperation({ summary: 'New create user' })
   @Post()
   async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
