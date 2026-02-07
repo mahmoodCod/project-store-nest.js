@@ -14,7 +14,10 @@ import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { Response } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorators';
+import UserRoleEnum from 'src/user/enum/userRoleEnum';
 
+@Roles(UserRoleEnum.Admin)
 @ApiBearerAuth()
 @ApiTags('Management address')
 @Controller('address')
