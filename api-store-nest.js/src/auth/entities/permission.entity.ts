@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('permissions')
 export class Permission {
@@ -13,8 +7,4 @@ export class Permission {
 
   @Column({ unique: true })
   name: string; // warehouse.create, warehouse.update
-
-  @ManyToMany(() => Permission, { eager: true })
-  @JoinTable()
-  permissions: Permission[];
 }

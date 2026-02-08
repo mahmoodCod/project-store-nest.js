@@ -66,10 +66,10 @@ export class User {
 
   // permission
   @ManyToMany(() => Role)
-  @JoinTable()
+  @JoinTable({ name: 'user_roles' })
   roles: Role[];
 
   @ManyToMany(() => Permission)
-  @JoinTable()
+  @JoinTable({ name: 'user_permissions' })
   permissions: Permission[];
 }
