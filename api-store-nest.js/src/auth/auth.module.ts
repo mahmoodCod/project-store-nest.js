@@ -8,9 +8,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { APP_GUARD } from '@nestjs/core';
 import { PermissionsGuard } from './guards/permissions.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Role } from './entities/role.entity';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Role]),
     UserModule,
     PassportModule,
     JwtModule.registerAsync({

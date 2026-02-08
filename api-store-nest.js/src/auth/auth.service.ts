@@ -3,12 +3,18 @@ import { JwtService } from '@nestjs/jwt';
 import UserRoleEnum from 'src/user/enum/userRoleEnum';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Role } from './entities/role.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
   ) {}
 
   async register(mobile: string, password: string, display_name: string) {
@@ -58,5 +64,11 @@ export class AuthService {
     user.permissions?.forEach((p) => permissions.add(p.name));
 
     return Array.from(permissions);
+  }
+
+  async createRole(name: string) {
+    const role = this.roleRepository.create({ name });
+
+    return this.roleRepository.save(role);
   }
 }
