@@ -46,4 +46,8 @@ export class AuthService {
       accessToken: token,
     };
   }
+
+  async getUserPermissions(userId: number) {
+    const user = await this.userService.findOne(userId);
+  }
 }
