@@ -12,7 +12,7 @@ import { CategoryModule } from './category/category.module';
 import { OrderModule } from './order/order.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { RolesGuard } from './auth/guards/roles.guard';
+// import { RolesGuard } from './auth/guards/roles.guard';
 
 @Module({
   //config
@@ -44,7 +44,8 @@ import { RolesGuard } from './auth/guards/roles.guard';
   providers: [
     AppService,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_GUARD, useClass: RolesGuard },
+    // { provide: APP_GUARD, useClass: RolesGuard },
+    // { provide: APP_GUARD, useClass: PermissionsGuard },
   ],
 })
 export class AppModule {}
