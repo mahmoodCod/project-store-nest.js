@@ -1,7 +1,11 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from '../auth.service';
-import { Permission } from '../entities/permission.entity';
 import { PERMISSION_KEY } from '../decorators/permissions.decorator';
 
 @Injectable()
@@ -11,11 +15,11 @@ export class PermissionsGuard implements CanActivate {
     private authService: AuthService,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext) {
     // get permissions in metadata
 
     // ['create.user', 'makedata']
-    const requiredPermission = this.reflector.getAllAndOverride<Permission[]>(
+    const requiredPermission = this.reflector.getAllAndOverride<string[]>(
       PERMISSION_KEY,
       [context.getClass(), context.getHandler()],
     );
@@ -27,7 +31,16 @@ export class PermissionsGuard implements CanActivate {
     const userId = user.id;
 
     // ['read.user','create.user','create.product','makedata']
-    const userPermission = this.authService.getUserPermissions(userId);
+    const userPermission = await this.authService.getUserPermissions(userId);
+
+    const hasPermission = requiredPermission.every((permission) =>
+      userPermission.includes(permission),
+    );
+
+    if (!hasPermission)
+      throw new ForbiddenException(
+        'You have the required permission for this operation',
+      );
 
     return true;
   }
