@@ -55,6 +55,20 @@ export class UserService {
     return users;
   }
 
+  // service permissions
+  async findUserByPermission(userId: number): Promise<User> {
+    const users = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['roles', 'roles.permissions', 'permissions'],
+    });
+
+    if (!users) {
+      throw new NotFoundException(`Users ${userId} not found !!`);
+    }
+
+    return users;
+  }
+
   async findOneByMobile(mobile: string, checkExist: boolean = false) {
     const users = await this.userRepository.findOneBy({ mobile });
 

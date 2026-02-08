@@ -49,8 +49,8 @@ export class AuthController {
     });
   }
 
-  @Get('getUserPermission/:userId')
-  async getUserPermission(@Param('userId') userId: number) {
-    const login = await this.authService.getUserPermissions(userId);
+  @Get('getUserPermission/:user_id')
+  async getUserPermission(@Param('user_id') user_id: number) {
+    const login = await this.authService.getUserPermissions(user_id);
   }
 }

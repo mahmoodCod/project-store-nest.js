@@ -48,6 +48,6 @@ export class AuthService {
   }
 
   async getUserPermissions(userId: number) {
-    const user = await this.userService.findOne(userId);
+    const user = await this.userService.findUserByPermission(userId);
   }
 }
