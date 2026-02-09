@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -86,7 +87,9 @@ export class AuthService {
       return await this.userService.addRole(userId, role);
     }
 
-    return false;
+    throw new BadRequestException(
+      'This role has already been shown to the user',
+    );
   }
 
   async removeRoleToUser(userId: number, roleId: number) {
@@ -99,6 +102,6 @@ export class AuthService {
       return await this.userService.removeRole(userId, roleId);
     }
 
-    return false;
+    throw new BadRequestException('Valid role entered');
   }
 }

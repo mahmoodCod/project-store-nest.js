@@ -1,11 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  HttpStatus,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -66,11 +59,23 @@ export class AuthController {
   @ApiBearerAuth()
   @Post('role/append-to-user')
   async addRoleToUser(@Body() roleToUser: RoleToUserDto) {
-    await this.authService.addRoleToUser(roleToUser.userId, roleToUser.roleId);
-
-    throw new BadRequestException(
-      'This role has already been shown to the user',
+    const role = await this.authService.addRoleToUser(
+      roleToUser.userId,
+      roleToUser.roleId,
     );
+
+    return role;
+  }
+
+  @ApiBearerAuth()
+  @Post('role/remove-to-user')
+  async removeRoleToUser(@Body() roleToUser: RoleToUserDto) {
+    const role = await this.authService.removeRoleToUser(
+      roleToUser.userId,
+      roleToUser.roleId,
+    );
+
+    return role;
   }
 
   // @Get('getUserPermission/:user_id')
