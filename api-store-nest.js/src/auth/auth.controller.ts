@@ -86,6 +86,16 @@ export class AuthController {
     return role;
   }
 
+  @ApiBearerAuth()
+  @Post('permission')
+  async createPermission(@Body() createRole: RoleDto) {
+    const permission = await this.authService.createPermission(
+      createRole?.name,
+    );
+
+    return permission;
+  }
+
   // @Get('getUserPermission/:user_id')
   // async getUserPermission(@Param('user_id') user_id: number) {
   //   const login = await this.authService.getUserPermissions(user_id);
