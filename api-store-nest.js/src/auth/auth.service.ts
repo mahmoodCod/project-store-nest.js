@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role } from './entities/role.entity';
+import { Permission } from './entities/permission.entity';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,8 @@ export class AuthService {
 
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
   ) {}
 
   async register(mobile: string, password: string, display_name: string) {
@@ -103,5 +106,17 @@ export class AuthService {
     }
 
     throw new BadRequestException('Valid role entered');
+  }
+
+  async getUserRole(userId: number) {
+    const user = await this.userService.findUserByPermission(userId);
+
+    return user.roles;
+  }
+
+  async createPermission(name: string) {
+    const permission = this.permissionRepository.create({ name });
+
+    return this.permissionRepository.save(permission);
   }
 }

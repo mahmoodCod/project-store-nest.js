@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -74,6 +74,14 @@ export class AuthController {
       roleToUser.userId,
       roleToUser.roleId,
     );
+
+    return role;
+  }
+
+  @ApiBearerAuth()
+  @Post('role/get-user-roles/:userId')
+  async getUserRoles(@Param('userId') userId: number) {
+    const role = await this.authService.getUserRole(userId);
 
     return role;
   }
