@@ -3,8 +3,9 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorators';
+import { RoleDto } from './dto/role.dto';
 
 @ApiTags('Management auth')
 @Controller('auth')
@@ -42,8 +43,9 @@ export class AuthController {
     });
   }
 
+  @ApiBearerAuth()
   @Post('role')
-  async createRole(@Body() createRole, @Res() res: Response) {
+  async createRole(@Body() createRole: RoleDto, @Res() res: Response) {
     const role = await this.authService.createRole(createRole?.name);
 
     return res.status(HttpStatus.OK).json({
