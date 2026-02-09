@@ -88,4 +88,17 @@ export class AuthService {
 
     return false;
   }
+
+  async removeRoleToUser(userId: number, roleId: number) {
+    const user = await this.userService.findUserByPermission(userId);
+
+    const role = await this.roleRepository.findOne({ where: { id: roleId } });
+    if (!role) throw new NotFoundException('User role not found');
+
+    if (user.roles.find((r) => r.id === role.id)) {
+      return await this.userService.removeRole(userId, roleId);
+    }
+
+    return false;
+  }
 }
