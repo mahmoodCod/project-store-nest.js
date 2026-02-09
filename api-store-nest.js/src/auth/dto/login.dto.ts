@@ -25,6 +25,6 @@ export class LoginDto {
   @IsString({ message: 'Password must be a string' })
   @MinLength(8, { message: 'At least 8-digit body character' })
   @MaxLength(16)
-  @ApiProperty({ example: '12345678' })
+  @ApiProperty({ example: 'MahmoodZar1@@' })
   password: string;
 }
