@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import UserRoleEnum from 'src/user/enum/userRoleEnum';
 import { UserService } from 'src/user/user.service';
@@ -70,5 +74,18 @@ export class AuthService {
     const role = this.roleRepository.create({ name });
 
     return this.roleRepository.save(role);
+  }
+
+  async addRoleToUser(userId: number, roleId: number) {
+    const user = await this.userService.findUserByPermission(userId);
+
+    const role = await this.roleRepository.findOne({ where: { id: roleId } });
+    if (!role) throw new NotFoundException('User role not found');
+
+    if (!user.roles.find((r) => r.id === role.id)) {
+      return await this.userService.addRole(userId, role);
+    }
+
+    return false;
   }
 }

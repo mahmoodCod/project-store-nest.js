@@ -69,6 +69,22 @@ export class UserService {
     return users;
   }
 
+  async addRole(userId, role) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.roles.push(role);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.save(user);
+  }
+
   async findOneByMobile(mobile: string, checkExist: boolean = false) {
     const users = await this.userRepository.findOneBy({ mobile });
 
