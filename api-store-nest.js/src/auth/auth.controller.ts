@@ -8,6 +8,7 @@ import { Public } from './decorators/public.decorators';
 import { RoleDto } from './dto/role.dto';
 import { RoleToUserDto } from './dto/role-to-user.dto';
 import { PermissionDto } from './dto/permission.dto';
+import { PermissionToRoleDto } from './dto/permission-to-role.dto';
 
 @ApiTags('Management auth')
 @Controller('auth')
@@ -102,6 +103,17 @@ export class AuthController {
       );
       return permission;
     }
+  }
+
+  @ApiBearerAuth()
+  @Post('permission/append-to-role')
+  async addPermissionToRole(@Body() permissionToRole: PermissionToRoleDto) {
+    const role = await this.authService.addPermissionToRole(
+      permissionToRole.permissionId,
+      permissionToRole.roleId,
+    );
+
+    return role;
   }
 
   // @Get('getUserPermission/:user_id')
