@@ -119,4 +119,29 @@ export class AuthService {
 
     return this.permissionRepository.save(permission);
   }
+
+  async addPermissionToRole(permissionId, roleId) {
+    const role = await this.roleRepository.findOne({
+      where: { id: roleId },
+      relations: ['permissions'],
+    });
+
+    if (!role) {
+      throw new NotFoundException(`Role ${roleId} not found`);
+    }
+
+    if (!role?.permissions.find((p) => p.id === permissionId)) {
+      const permission = await this.permissionRepository.findOne({
+        where: { id: permissionId },
+      });
+
+      if (!permission) {
+        throw new NotFoundException(`Permission ${permissionId} not found`);
+      }
+
+      role.permissions.push(permission);
+    } else throw new BadRequestException('This permission already exists');
+
+    return this.roleRepository.save(role);
+  }
 }
