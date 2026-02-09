@@ -88,6 +88,25 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
+  async removeRole(userId: number, roleId: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['roles'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.roles = user.roles.filter((r) => r.id !== roleId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.save(user);
+  }
+
   async findOneByMobile(mobile: string, checkExist: boolean = false) {
     const users = await this.userRepository.findOneBy({ mobile });
 
