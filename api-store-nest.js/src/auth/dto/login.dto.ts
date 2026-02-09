@@ -8,6 +8,7 @@ import {
   Validate,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 export class LoginDto {
   @IsString({ message: 'Mobile must be a string' })
   @IsNotEmpty({ message: 'Mobile is required' })
@@ -18,10 +19,12 @@ export class LoginDto {
     message: 'Mobile number must be a valid Iranian mobile number',
   })
   @Transform(({ value }) => (value as string).trim())
+  @ApiProperty({ example: '09932915478' })
   mobile: string;
 
   @IsString({ message: 'Password must be a string' })
   @MinLength(8, { message: 'At least 8-digit body character' })
   @MaxLength(16)
+  @ApiProperty({ example: '12345678' })
   password: string;
 }

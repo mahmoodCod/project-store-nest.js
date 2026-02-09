@@ -6,6 +6,7 @@ import { Response } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorators';
 import { RoleDto } from './dto/role.dto';
+import { RoleToUserDto } from './dto/role-to-user.dto';
 
 @ApiTags('Management auth')
 @Controller('auth')
@@ -52,6 +53,20 @@ export class AuthController {
       statusCode: HttpStatus.OK,
       data: role,
       message: 'Create role successfully :))',
+    });
+  }
+
+  @Post('role/append-to-user')
+  async addRoleToUser(@Body() roleToUser: RoleToUserDto, @Res() res: Response) {
+    const role = await this.authService.addRoleToUser(
+      roleToUser.userId,
+      roleToUser.roleId,
+    );
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: role,
+      message: 'Add role to user successfully :))',
     });
   }
 

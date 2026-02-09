@@ -70,7 +70,10 @@ export class UserService {
   }
 
   async addRole(userId, role) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['roles'],
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
