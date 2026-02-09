@@ -7,6 +7,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorators';
 import { RoleDto } from './dto/role.dto';
 import { RoleToUserDto } from './dto/role-to-user.dto';
+import { PermissionDto } from './dto/permission.dto';
 
 @ApiTags('Management auth')
 @Controller('auth')
@@ -88,12 +89,19 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Post('permission')
-  async createPermission(@Body() createRole: RoleDto) {
-    const permission = await this.authService.createPermission(
-      createRole?.name,
-    );
+  async createPermission(@Body() createPermission: PermissionDto) {
+    if (Array.isArray(createPermission.name)) {
+      createPermission.name.forEach((p) => {
+        this.authService.createPermission(p);
+      });
 
-    return permission;
+      return 'create all permission sended';
+    } else {
+      const permission = await this.authService.createPermission(
+        createPermission?.name,
+      );
+      return permission;
+    }
   }
 
   // @Get('getUserPermission/:user_id')
