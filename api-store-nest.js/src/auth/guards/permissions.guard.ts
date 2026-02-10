@@ -7,6 +7,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthService } from '../auth.service';
 import { PERMISSION_KEY } from '../decorators/permissions.decorator';
+import { permission } from 'process';
+import { request } from 'express';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -42,6 +44,18 @@ export class PermissionsGuard implements CanActivate {
         'You have the required permission for this operation',
       );
 
+    // check resurce own
+    requiredPermission.forEach((permission) => {
+      if (permission.endsWith(':own')) {
+        const [resurce, action] = permission.split(':');
+        const paramId = request.params['id'];
+
+        throw new ForbiddenException(
+          'You have the required permission for this operation',
+        );
+      }
+    });
+
     return true;
   }
 
@@ -52,4 +66,10 @@ export class PermissionsGuard implements CanActivate {
 
     return str;
   }
+
+  private async checkOwnerShip(
+    resurce: string,
+    userId: number,
+    resourceId: number,
+  ) {}
 }

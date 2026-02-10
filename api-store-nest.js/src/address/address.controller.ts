@@ -16,6 +16,7 @@ import { Response } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorators';
 import UserRoleEnum from 'src/user/enum/userRoleEnum';
+import { Permissions } from 'src/auth/decorators/permissions.decorator';
 
 @Roles(UserRoleEnum.Admin)
 @ApiBearerAuth()
@@ -75,6 +76,7 @@ export class AddressController {
     });
   }
 
+  @Permissions('address:delete:own')
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() res: Response) {
     const removeAddress = await this.addressService.remove(+id);
