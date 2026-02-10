@@ -69,6 +69,25 @@ export class UserService {
     return users;
   }
 
+  async addPermission(userId, permission) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['permissions'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.roles.push(permission);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.save(user);
+  }
+
   async addRole(userId, role) {
     const user = await this.userRepository.findOne({
       where: { id: userId },
