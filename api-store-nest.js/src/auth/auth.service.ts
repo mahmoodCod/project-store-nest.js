@@ -148,7 +148,9 @@ export class AuthService {
   async addPermissionToUser(userId: number, permissionId: number) {
     const user = await this.userService.findUserByPermission(userId);
 
-    const permission = await this.permissionRepository.findOne({ where: { id: permissionId } });
+    const permission = await this.permissionRepository.findOne({
+      where: { id: permissionId },
+    });
     if (!permission) throw new NotFoundException('License not found');
 
     if (!user.permissions.find((p) => p.id === permission.id)) {
