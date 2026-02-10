@@ -154,6 +154,18 @@ export class AuthService {
     if (!permission) throw new NotFoundException('License not found');
 
     if (!user.permissions.find((p) => p.id === permission.id)) {
+      let assignWithRole = false;
+      user.roles.forEach((role) => {
+        role.permissions.forEach((p) => {
+          if (p.id === permissionId) assignWithRole = true;
+        });
+      });
+
+      if (assignWithRole)
+        throw new BadRequestException(
+          'This permission has already been shown to the user',
+        );
+
       return await this.userService.addPermission(userId, permission);
     }
 

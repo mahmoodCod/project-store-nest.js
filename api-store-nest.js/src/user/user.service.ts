@@ -79,11 +79,7 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    user.roles.push(permission);
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    user.permissions.push(permission);
 
     return this.userRepository.save(user);
   }
