@@ -34,7 +34,7 @@ export class PermissionsGuard implements CanActivate {
     const userPermission = await this.authService.getUserPermissions(userId);
 
     const hasPermission = requiredPermission.every((permission) =>
-      userPermission.includes(permission),
+      userPermission.includes(this.cleanOwn(permission)),
     );
 
     if (!hasPermission)
@@ -43,5 +43,13 @@ export class PermissionsGuard implements CanActivate {
       );
 
     return true;
+  }
+
+  private cleanOwn(str: string): string {
+    if (str.endsWith(':own')) {
+      return str.slice(0, -4);
+    }
+
+    return str;
   }
 }

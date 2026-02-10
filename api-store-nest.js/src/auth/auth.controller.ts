@@ -128,10 +128,11 @@ export class AuthController {
     return permission;
   }
 
-  // @Get('getUserPermission/:user_id')
-  // async getUserPermission(@Param('user_id') user_id: number) {
-  //   const login = await this.authService.getUserPermissions(user_id);
+  @ApiBearerAuth()
+  @Post('permission/get-user-permission/:userId')
+  async getUsePermission(@Param('userId') userId: number) {
+    const permission = await this.authService.getUserPermissions(userId);
 
-  //   return login;
-  // }
+    return permission;
+  }
 }
