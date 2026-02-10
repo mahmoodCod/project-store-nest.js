@@ -9,6 +9,7 @@ import { RoleDto } from './dto/role.dto';
 import { RoleToUserDto } from './dto/role-to-user.dto';
 import { PermissionDto } from './dto/permission.dto';
 import { PermissionToRoleDto } from './dto/permission-to-role.dto';
+import { PermissionToUserDto } from './dto/permission-to-user.dto';
 
 @ApiTags('Management auth')
 @Controller('auth')
@@ -114,6 +115,17 @@ export class AuthController {
     );
 
     return role;
+  }
+
+  @ApiBearerAuth()
+  @Post('permission/append-to-user')
+  async addPermissionToUser(@Body() permissionToUser: PermissionToUserDto) {
+    const permission = await this.authService.addPermissionToUser(
+      permissionToUser.userId,
+      permissionToUser.permissionId,
+    );
+
+    return permission;
   }
 
   // @Get('getUserPermission/:user_id')
