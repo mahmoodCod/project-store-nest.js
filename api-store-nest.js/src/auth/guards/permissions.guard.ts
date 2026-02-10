@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
@@ -7,12 +8,16 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthService } from '../auth.service';
 import { PERMISSION_KEY } from '../decorators/permissions.decorator';
-import { permission } from 'process';
 import { request } from 'express';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Address } from 'src/address/entities/address.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor(
+    @InjectRepository(Address)
+    private readonly addressRepository: Repository<Address>,
     private reflector: Reflector,
     private authService: AuthService,
   ) {}
@@ -45,17 +50,20 @@ export class PermissionsGuard implements CanActivate {
       );
 
     // check resurce own
-    requiredPermission.forEach((permission) => {
+    // requiredPermission.forEach((permission) => {
+    for (const permission of requiredPermission) {
       if (permission.endsWith(':own')) {
         const [resurce, action] = permission.split(':');
-        const paramId = request.params['id'];
+        const paramId = +request.params['id'];
 
-        throw new ForbiddenException(
-          'You have the required permission for this operation',
-        );
+        const isOwner = await this.checkOwnerShip(resurce, userId, paramId);
+        if (isOwner) return true;
+        else
+          throw new ForbiddenException(
+            'You do not have access to this operation on this resource',
+          );
       }
-    });
-
+    }
     return true;
   }
 
@@ -71,5 +79,18 @@ export class PermissionsGuard implements CanActivate {
     resurce: string,
     userId: number,
     resourceId: number,
-  ) {}
+  ) {
+    if (resurce === 'address') {
+      const address = await this.addressRepository.findOne({
+        where: { id: resourceId },
+      });
+
+      if (!address) {
+        throw new BadRequestException('Address not found !!');
+      }
+
+      return address.user.id === userId;
+    }
+    return false;
+  }
 }
