@@ -55,6 +55,73 @@ export class UserService {
     return users;
   }
 
+  // service permissions
+  async findUserByPermission(userId: number): Promise<User> {
+    const users = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['roles', 'roles.permissions', 'permissions'],
+    });
+
+    if (!users) {
+      throw new NotFoundException(`Users ${userId} not found !!`);
+    }
+
+    return users;
+  }
+
+  async addPermission(userId, permission) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['permissions'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.permissions.push(permission);
+
+    return this.userRepository.save(user);
+  }
+
+  async addRole(userId, role) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['roles'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.roles.push(role);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.save(user);
+  }
+
+  async removeRole(userId: number, roleId: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['roles'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.roles = user.roles.filter((r) => r.id !== roleId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.save(user);
+  }
+
   async findOneByMobile(mobile: string, checkExist: boolean = false) {
     const users = await this.userRepository.findOneBy({ mobile });
 

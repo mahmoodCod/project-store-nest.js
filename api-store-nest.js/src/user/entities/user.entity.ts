@@ -14,6 +14,8 @@ import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { BookmarkProduct } from 'src/product/entities/product-bookmark.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { Order } from 'src/order/entities/order.entity';
+import { Role } from 'src/auth/entities/role.entity';
+import { Permission } from 'src/auth/entities/permission.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -61,4 +63,13 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // permission
+  @ManyToMany(() => Role)
+  @JoinTable({ name: 'user_roles' })
+  roles: Role[];
+
+  @ManyToMany(() => Permission)
+  @JoinTable({ name: 'user_permissions' })
+  permissions: Permission[];
 }

@@ -13,8 +13,13 @@ import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorators';
+import UserRoleEnum from 'src/user/enum/userRoleEnum';
+import { Permissions } from 'src/auth/decorators/permissions.decorator';
 
+@Roles(UserRoleEnum.Admin)
+@ApiBearerAuth()
 @ApiTags('Management address')
 @Controller('address')
 export class AddressController {
@@ -71,6 +76,7 @@ export class AddressController {
     });
   }
 
+  @Permissions('address:delete:own')
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() res: Response) {
     const removeAddress = await this.addressService.remove(+id);

@@ -15,8 +15,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
 import UserRoleEnum from './enum/userRoleEnum';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorators';
 
+@Roles(UserRoleEnum.Admin, UserRoleEnum.Moderator)
+@ApiBearerAuth()
 @ApiTags('Management users')
 @Controller('user')
 export class UserController {
