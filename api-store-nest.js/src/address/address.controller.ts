@@ -8,6 +8,7 @@ import {
   Delete,
   Res,
   HttpStatus,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
@@ -17,7 +18,9 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorators';
 import UserRoleEnum from 'src/user/enum/userRoleEnum';
 import { Permissions } from 'src/auth/decorators/permissions.decorator';
+import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 
+@UseInterceptors(LoggingInterceptor)
 @Roles(UserRoleEnum.Admin)
 @ApiBearerAuth()
 @ApiTags('Management address')
