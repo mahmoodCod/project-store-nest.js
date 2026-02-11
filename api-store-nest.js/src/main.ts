@@ -3,11 +3,13 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ResponceFormaterInterceptor } from './interceptors/responce-formater.interceptor';
+import { HtppException } from './exception/http.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new ResponceFormaterInterceptor());
+  app.useGlobalFilters(new HtppException());
 
   // swagger
   const config = new DocumentBuilder()
