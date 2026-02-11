@@ -35,7 +35,7 @@ export class PermissionsGuard implements CanActivate {
 
     // get user data
     const { user } = context.switchToHttp().getRequest();
-    const userId = user.id;
+    const userId = user.userId;
 
     // ['read.user','create.user','create.product','makedata']
     const userPermission = await this.authService.getUserPermissions(userId);
@@ -83,6 +83,7 @@ export class PermissionsGuard implements CanActivate {
     if (resurce === 'address') {
       const address = await this.addressRepository.findOne({
         where: { id: resourceId },
+        relations: ['user'],
       });
 
       if (!address) {
