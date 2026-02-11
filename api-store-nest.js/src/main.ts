@@ -7,7 +7,7 @@ import { ResponceFormaterInterceptor } from './interceptors/responce-formater.in
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  // app.useGlobalPipes(new ResponceFormaterInterceptor());
+  app.useGlobalInterceptors(new ResponceFormaterInterceptor());
 
   // swagger
   const config = new DocumentBuilder()
