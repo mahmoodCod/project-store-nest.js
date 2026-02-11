@@ -2,10 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ResponceFormaterInterceptor } from './interceptors/responce-formater.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalPipes(new ResponceFormaterInterceptor());
 
   // swagger
   const config = new DocumentBuilder()
