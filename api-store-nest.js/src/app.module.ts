@@ -13,6 +13,7 @@ import { OrderModule } from './order/order.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 // import { RolesGuard } from './auth/guards/roles.guard';
+import { SeederModule } from './seeder/seeder.module';
 
 @Module({
   //config
@@ -39,6 +40,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     ProductModule,
     CategoryModule,
     OrderModule,
+    SeederModule,
   ],
   controllers: [AppController],
   providers: [
