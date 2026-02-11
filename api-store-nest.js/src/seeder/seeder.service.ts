@@ -2,7 +2,7 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Permission } from 'src/auth/entities/permission.entity';
 import { Role } from 'src/auth/entities/role.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class SeederService implements OnApplicationBootstrap {
@@ -46,6 +46,29 @@ export class SeederService implements OnApplicationBootstrap {
     }
 
     // step 2: create roles
-    const rolesData = ['admin', 'manager', 'user', 'support'];
+    const rolesData = [
+      { name: 'admin', permissions: permissionsData },
+      { name: 'manager', permissions: [] },
+      { name: 'user', permissions: [] },
+    ];
+
+    for (const roleObj of rolesData) {
+      const role = await this.roleRepository.findOne({
+        where: { name: roleObj.name },
+      });
+
+      if (!role) {
+        const permissionsData = await this.permissionRepository.findBy({
+          name: In(roleObj.permissions),
+        });
+
+        const role = this.roleRepository.create({
+          name: roleObj.name,
+          permissions: permissionsData,
+        });
+
+        await this.roleRepository.save(role);
+      }
+    }
   }
 }
