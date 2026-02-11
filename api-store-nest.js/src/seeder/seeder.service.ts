@@ -57,15 +57,18 @@ export class SeederService implements OnApplicationBootstrap {
         where: { name: roleObj.name },
       });
 
+      const permissionsData = await this.permissionRepository.findBy({
+        name: In(roleObj.permissions),
+      });
       if (!role) {
-        const permissionsData = await this.permissionRepository.findBy({
-          name: In(roleObj.permissions),
-        });
-
         const role = this.roleRepository.create({
           name: roleObj.name,
           permissions: permissionsData,
         });
+
+        await this.roleRepository.save(role);
+      } else {
+        role.permissions = permissionsData;
 
         await this.roleRepository.save(role);
       }
