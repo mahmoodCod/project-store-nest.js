@@ -14,6 +14,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 // import { RolesGuard } from './auth/guards/roles.guard';
 import { SeederModule } from './seeder/seeder.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   //config
@@ -21,6 +22,9 @@ import { SeederModule } from './seeder/seeder.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
+    // task scheduling
+    ScheduleModule.forRoot(),
     //db conecction
     TypeOrmModule.forRoot({
       type: 'mysql',
