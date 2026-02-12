@@ -2,5 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CleanupJobs {
-  cleanOtp() {}
+  cleanOtp() {
+    console.log('cleaning...');
+  }
 }
