@@ -17,6 +17,7 @@ import { SeederModule } from './seeder/seeder.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
 import { BullModule } from '@nestjs/bull';
+import { SmsModule } from './sms/sms.module';
 
 @Module({
   //config
@@ -56,6 +57,7 @@ import { BullModule } from '@nestjs/bull';
     OrderModule,
     SeederModule,
     TasksModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [
