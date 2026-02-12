@@ -16,6 +16,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { SeederModule } from './seeder/seeder.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   //config
@@ -36,6 +37,14 @@ import { TasksModule } from './tasks/tasks.module';
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
       synchronize: true,
+    }),
+
+    // Bull module
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
     }),
     // module
     UserModule,
