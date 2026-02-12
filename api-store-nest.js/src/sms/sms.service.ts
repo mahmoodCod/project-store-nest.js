@@ -6,10 +6,10 @@ import { Queue } from 'bull';
 export class SmsService {
   constructor(@InjectQueue('sms-queue') private smsQueue: Queue) {}
 
-  async sendMultiSms(number: string, text: string) {
+  async sendSms(mobile: string, message: string) {
     await this.smsQueue.add(
       'send-sms',
-      { number, text },
+      { mobile, message },
       {
         attempts: 3,
         backoff: 5000,

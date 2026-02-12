@@ -1,4 +1,17 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+import { SmsService } from './sms.service';
+import { Public } from 'src/auth/decorators/public.decorators';
+import { SendSmsDto } from './dto/send-sms.dto';
 
 @Controller('sms')
-export class SmsController {}
+export class SmsController {
+  constructor(private readonly smsService: SmsService) {}
+
+  @Public()
+  @Post('send')
+  async send(@Body() sendSmsDto: SendSmsDto) {
+    await this.smsService.sendSms(sendSmsDto.mobile, sendSmsDto.message);
+
+    return 'Sms job queued';
+  }
+}
