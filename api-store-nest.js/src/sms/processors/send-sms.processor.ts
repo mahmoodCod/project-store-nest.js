@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 
