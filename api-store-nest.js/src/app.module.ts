@@ -18,6 +18,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
 import { BullModule } from '@nestjs/bull';
 import { SmsModule } from './sms/sms.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   //config
@@ -25,6 +26,9 @@ import { SmsModule } from './sms/sms.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
+    // event handler
+    EventEmitterModule.forRoot(),
 
     // task scheduling
     ScheduleModule.forRoot(),

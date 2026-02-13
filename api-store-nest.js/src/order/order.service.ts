@@ -13,6 +13,7 @@ import { ProductService } from 'src/product/product.service';
 import { orderStatus } from './enum/order-status.enum';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class OrderService {
@@ -30,6 +31,8 @@ export class OrderService {
     private readonly productService: ProductService,
 
     private readonly httpService: HttpService,
+
+    private readonly eventEmitter: EventEmitter2,
   ) {}
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     const user = await this.userService.findOne(createOrderDto.userId);
@@ -73,6 +76,9 @@ export class OrderService {
       where: { id: savedOrder.id },
       relations: ['user', 'address', 'items', 'items.product'],
     });
+
+    //  create factor (event-emitter)
+    this.eventEmitter.emit('factor-create', returned_order);
 
     if (!returned_order) {
       throw new NotFoundException('Order not found');
