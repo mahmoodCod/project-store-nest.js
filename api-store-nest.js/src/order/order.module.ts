@@ -8,6 +8,7 @@ import { ProductModule } from 'src/product/product.module';
 import { UserModule } from 'src/user/user.module';
 import { AddressModule } from 'src/address/address.module';
 import { HttpModule } from '@nestjs/axios';
+import { FactorListener } from './listeners/factor.listener';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { HttpModule } from '@nestjs/axios';
     HttpModule,
   ],
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [OrderService, FactorListener],
 })
 export class OrderModule {}

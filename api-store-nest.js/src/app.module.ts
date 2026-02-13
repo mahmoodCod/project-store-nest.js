@@ -14,6 +14,11 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 // import { RolesGuard } from './auth/guards/roles.guard';
 import { SeederModule } from './seeder/seeder.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './tasks/tasks.module';
+import { BullModule } from '@nestjs/bull';
+import { SmsModule } from './sms/sms.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   //config
@@ -21,6 +26,12 @@ import { SeederModule } from './seeder/seeder.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
+    // event handler
+    EventEmitterModule.forRoot(),
+
+    // task scheduling
+    ScheduleModule.forRoot(),
     //db conecction
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -32,6 +43,14 @@ import { SeederModule } from './seeder/seeder.module';
       entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+
+    // Bull module
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     // module
     UserModule,
     AuthModule,
@@ -41,6 +60,8 @@ import { SeederModule } from './seeder/seeder.module';
     CategoryModule,
     OrderModule,
     SeederModule,
+    TasksModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [
