@@ -6,15 +6,16 @@ export class SmsProcessor {
   @Process('send-sms')
   async handleSend(job: Job<{ mobile: string; message: string }>) {
     console.log(
-      `Sending sms to ${job.data.mobile} with message: ${job.data.message}`,
+      `💬Sending sms to ${job.data.mobile} with message: ${job.data.message}`,
     );
 
-    if (Math.random() < 0.5) {
-      console.log('Sms sending failed. will retry...');
+    const number = Math.random();
+    if (number < 0.5) {
+      console.log('❌Sms sending failed. will retry...');
       throw new Error('Sms service error');
     }
 
-    console.log('Sms send sucessfully');
+    console.log('✅Sms send sucessfully');
     return true;
   }
 }

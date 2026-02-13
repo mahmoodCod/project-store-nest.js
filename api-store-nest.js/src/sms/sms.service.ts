@@ -13,7 +13,7 @@ export class SmsService {
       {
         attempts: 3,
         backoff: 5000,
-        delay: 2000,
+        delay: 10000,
         removeOnComplete: true,
         removeOnFail: false,
       },
