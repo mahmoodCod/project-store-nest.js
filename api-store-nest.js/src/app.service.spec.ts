@@ -11,4 +11,8 @@ describe('TEST Sum() method', () => {
   it('sum 1,2 = 3', () => {
     expect(appService.sum(1, 2)).toBe(3);
   });
+
+  it('sum -5,7 = 2', () => {
+    expect(appService.sum(-5, 7)).toBe(2);
+  });
 });
